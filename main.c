@@ -48,28 +48,34 @@ char **make_array_of_strings(char *command)
 */
 int main(int argc, char **argv, char **env)
 {
-	char *command_buffer, *shell_path = malloc(BUFF_SIZE);
+	char *command_buffer;
+	char **environ;
 	size_t size = BUFF_SIZE, i;
 	char **array_tokens;
 	(void)argc;
 	(void)argv;
-
 	command_buffer = malloc(BUFF_SIZE * sizeof(char));
-	getcwd(shell_path, BUFF_SIZE);
-	strcat(shell_path, "/shell");
-	_setenv("shell", shell_path, 1);
 	while (1)
 	{
 		printf("$ ");
 		fflush(stdout);
 		if (_getline(&command_buffer, &size, stdin) == -1)
 			break;
+		if (strcmp(command_buffer, "env\n") == 0)
+		{
+			environ = env;
+			while (*environ != NULL)
+			{
+				printf("%s\n", *environ);
+				environ++;
+			}
+			continue;
+		}
 		array_tokens = make_array_of_strings(command_buffer);
 		for (i = 0; array_tokens[i] != NULL; i++)
 			continue;
 		execute_function(array_tokens, i, env);
 	}
-	free(shell_path);
 	free(command_buffer);
 	return (0);
 }
