@@ -8,7 +8,7 @@ char **make_array_of_strings(char *command)
 {
 	char *token = malloc(BUFF_SIZE);
 	char **tokens = malloc(BUFF_SIZE * sizeof(char *));
-	int num_tokns = 0, i;
+	int num_tokns = 0, i, j = 0;
 
 	token = _strtok(command, " ");
 	if (tokens == NULL || token == NULL)
@@ -27,18 +27,32 @@ char **make_array_of_strings(char *command)
 		num_tokns++;
 		token = _strtok(NULL, " ");
 	}
+	while (j < num_tokns)
+	{
+		if (j == num_tokns - 1)
+		{
+			tokens[j][strlen(tokens[j]) - 1] = '\0';
+			break;
+		}
+		j++;
+	}
 	tokens[num_tokns] = NULL;
 	return (tokens);
 }
 /**
  * main - main function
+ * @argc: length of vector array
+ * @argv: vector array
+ * @env: environment variables
  * Return: 0 in success, -1 in error
 */
-int main(void)
+int main(int argc, char **argv, char **env)
 {
 	char *command_buffer, *shell_path = malloc(BUFF_SIZE);
-	size_t size = BUFF_SIZE;
+	size_t size = BUFF_SIZE, i;
 	char **array_tokens;
+	(void)argc;
+	(void)argv;
 
 	command_buffer = malloc(BUFF_SIZE * sizeof(char));
 	getcwd(shell_path, BUFF_SIZE);
@@ -51,7 +65,9 @@ int main(void)
 		if (_getline(&command_buffer, &size, stdin) == -1)
 			break;
 		array_tokens = make_array_of_strings(command_buffer);
-		execute_function(array_tokens);
+		for (i = 0; array_tokens[i] != NULL; i++)
+			continue;
+		execute_function(array_tokens, i, env);
 	}
 	free(shell_path);
 	free(command_buffer);

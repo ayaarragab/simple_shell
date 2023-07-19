@@ -2,15 +2,16 @@
 /**
  * execute_function - excute based on a command
  * @array_tokens: array of tokens
+ * @number_of_tokens: n_tokns
+ * @env: environmet variables
  * Return: nothing
 */
-void execute_function(char **array_tokens)
+void execute_function(char **array_tokens, int number_of_tokens, char **env)
 {
-	char *command = NULL;
-	pid_t pid = fork();
+	pid_t pid;
 
-	command = array_tokens[0];
-	command[strlen(command) - 1] = '\0';
+	array_tokens[number_of_tokens] = NULL;
+	pid = fork();
 	if (pid  < 0)
 	{
 		fprintf(stderr, "./shell: No such file or directory\n");
@@ -18,7 +19,7 @@ void execute_function(char **array_tokens)
 	}
 	else if (pid == 0)
 	{
-		if (execve(array_tokens[0], array_tokens, 0) == -1)
+		if (execve(array_tokens[0], array_tokens, env) == -1)
 		{
 			fprintf(stderr, "./shell: No such file or directory\n");
 			exit(EXIT_FAILURE);
