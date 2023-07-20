@@ -71,6 +71,10 @@ int main(int argc, char **argv, char **env)
 			}
 			continue;
 		}
+		else if (strcmp(command_buffer, "exit\n") == 0)
+		{
+			exit_command();
+		}
 		array_tokens = make_array_of_strings(command_buffer);
 		for (i = 0; array_tokens[i] != NULL; i++)
 			continue;
