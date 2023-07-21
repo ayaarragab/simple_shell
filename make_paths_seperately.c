@@ -1,4 +1,9 @@
 #include "main.h"
+/**
+ * make_paths_seperately - paths
+ * @paths: PATH string
+ * Return: array_of_paths
+*/
 char **make_paths_seperately(char *paths)
 {
 	char *token;
