@@ -3,7 +3,8 @@
  * exit_command - exit shell
  * Return: nothing
 */
-void exit_command() {
-    printf("exit\n");
-    exit(0);
+void exit_command()
+{
+	printf("exit\n");
+	exit(0);
 }
