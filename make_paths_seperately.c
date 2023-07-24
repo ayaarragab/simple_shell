@@ -1,4 +1,8 @@
 #include "main.h"
+/*
+ * make_paths_seperately - to check spaces between strings
+ *
+ */
 char **make_paths_seperately(char *paths)
 {
 	char *token;
@@ -6,7 +10,7 @@ char **make_paths_seperately(char *paths)
 	int num_tokens = 0, i;
 	char paths_copy[BUFF_SIZE];
 
-	strcpy(paths_copy,paths);
+	strcpy(paths_copy, paths);
 	token = _strtok(paths_copy, ":");
 	if (tokens == NULL || token == NULL)
 		return (NULL);
