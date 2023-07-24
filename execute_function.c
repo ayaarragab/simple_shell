@@ -5,7 +5,7 @@
 */
 void error_behave(void)
 {
-	fprintf(stderr, "./shell: No such file or directory\n");
+	fprintf(stderr, "./hsh: No such file or directory\n");
 	exit(EXIT_FAILURE);
 }
 /**
@@ -16,16 +16,23 @@ void error_behave(void)
 */
 char *check_for_correct_path(char **argv, char **array_paths)
 {
-	char **edited_argv = argv;
 	char *concatenated_path;
 	int i;
+	size_t concat_size;
 
-	for (i = 0; array_paths[i] != NULL ; i++)
+	for (i = 0; array_paths[i] != NULL; i++)
 	{
-		concatenated_path = strcat(array_paths[i], "/");
-		strcat(concatenated_path, edited_argv[0]);
+		concat_size = strlen(array_paths[i]) + strlen("/") + strlen(argv[0]) + 1;
+		concatenated_path = malloc(concat_size);
+		if (concatenated_path == NULL)
+			return (NULL);
+		strcpy(concatenated_path, array_paths[i]);
+		strcat(concatenated_path, "/");
+		strcat(concatenated_path, argv[0]);
 		if (access(concatenated_path, F_OK) == 0)
 			return (concatenated_path);
+		else
+			free(concatenated_path);
 	}
 	return (NULL);
 }
@@ -53,39 +60,44 @@ char *PATH_directories(char **env)
 */
 void execute_function(char **array_tokens, int number_of_tokens, char **env)
 {
-	pid_t pid;
+	pid_t pid = 1;
 	char *PATH;
 	char **array_of_paths;
 
 	PATH = PATH_directories(env);
 	array_of_paths = make_paths_seperately(PATH);
 	array_tokens[number_of_tokens] = NULL;
-	if (array_tokens[0][0] == '/')
+	if (array_tokens[0] != NULL && ( array_tokens[0][0] == '/'||
+	(array_tokens[0][0] == '.' && array_tokens[0][1] == '/')))
 	{
 		pid = fork();
 		if (pid  < 0)
 			error_behave();
 		else if (pid == 0)
 		{
-			if (execve(array_tokens[0], array_tokens, env) == -1)
+				if (execve(array_tokens[0], array_tokens, env) == -1)
+					error_behave();
+			else
 				error_behave();
 		}
 		else
 			wait(NULL);
 	}
-	else
+	else if (array_tokens[0] != NULL && array_tokens[0][0] != '/')
 	{
-		if (check_for_correct_path(array_tokens, array_of_paths) != NULL)
-			pid = fork();
-		if (pid  < 0)
-			error_behave();
-		else if (pid == 0)
-		{
-			if (execve(check_for_correct_path(array_tokens, array_of_paths),
-			array_tokens, env) == -1)
-				error_behave();
-		}
-		else
-			wait(NULL);
+			if (check_for_correct_path(array_tokens, array_of_paths) != NULL)
+			{
+				pid = fork();
+				if (pid < 0)
+					error_behave();
+				else if (pid == 0)
+				{
+					if (execve(check_for_correct_path(array_tokens, array_of_paths),
+					array_tokens, env) == -1)
+						error_behave();
+				}
+				else
+					wait(NULL);
+				}
 	}
 }

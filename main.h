@@ -12,6 +12,7 @@
 #include <errno.h>
 #include <dirent.h>
 #include <limits.h>
+#include <ctype.h>
 ssize_t _getline(char **command_buff, size_t *n, FILE *_stdin);
 char *_strtok(char *string, const char *delim);
 /**
@@ -28,5 +29,6 @@ void execute_function(char **array_tokens, int number_of_tokens, char **env);
 int _setenv(const char *name, const char *value, int overwrite);
 void exit_command(void);
 char **make_paths_seperately(char *paths);
+char *trim(char *str);
 #define BUFF_SIZE 1024
 #endif
