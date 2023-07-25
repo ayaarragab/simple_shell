@@ -1,8 +1,9 @@
 #include "main.h"
-/*
- * make_paths_seperately - to check spaces between strings
- *
- */
+/**
+ * make_paths_seperately - splits path
+ * @paths: paths string
+ * Return: splitted paths
+*/
 char **make_paths_seperately(char *paths)
 {
 	char *token;

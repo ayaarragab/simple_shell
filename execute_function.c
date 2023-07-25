@@ -31,8 +31,7 @@ char *check_for_correct_path(char **argv, char **array_paths)
 		strcat(concatenated_path, argv[0]);
 		if (access(concatenated_path, F_OK) == 0)
 			return (concatenated_path);
-		else
-			free(concatenated_path);
+		free(concatenated_path);
 	}
 	return (NULL);
 }
@@ -67,7 +66,7 @@ void execute_function(char **array_tokens, int number_of_tokens, char **env)
 	PATH = PATH_directories(env);
 	array_of_paths = make_paths_seperately(PATH);
 	array_tokens[number_of_tokens] = NULL;
-	if (array_tokens[0] != NULL && ( array_tokens[0][0] == '/'||
+	if (array_tokens[0] != NULL && (array_tokens[0][0] == '/' ||
 	(array_tokens[0][0] == '.' && array_tokens[0][1] == '/')))
 	{
 		pid = fork();
@@ -75,8 +74,8 @@ void execute_function(char **array_tokens, int number_of_tokens, char **env)
 			error_behave();
 		else if (pid == 0)
 		{
-				if (execve(array_tokens[0], array_tokens, env) == -1)
-					error_behave();
+			if (execve(array_tokens[0], array_tokens, env) == -1)
+				error_behave();
 			else
 				error_behave();
 		}
@@ -85,19 +84,19 @@ void execute_function(char **array_tokens, int number_of_tokens, char **env)
 	}
 	else if (array_tokens[0] != NULL && array_tokens[0][0] != '/')
 	{
-			if (check_for_correct_path(array_tokens, array_of_paths) != NULL)
+		if (check_for_correct_path(array_tokens, array_of_paths) != NULL)
+		{
+			pid = fork();
+			if (pid < 0)
+				error_behave();
+			else if (pid == 0)
 			{
-				pid = fork();
-				if (pid < 0)
+				if (execve(check_for_correct_path(array_tokens, array_of_paths),
+				array_tokens, env) == -1)
 					error_behave();
-				else if (pid == 0)
-				{
-					if (execve(check_for_correct_path(array_tokens, array_of_paths),
-					array_tokens, env) == -1)
-						error_behave();
-				}
-				else
-					wait(NULL);
-				}
+			}
+			else
+				wait(NULL);
+		}
 	}
 }
