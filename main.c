@@ -1,6 +1,6 @@
 #include "main.h"
 /**
- * exit_command-2 - exit shell with a specific status
+ * exit_command_2 - exit shell with a specific status
  * @status: The exit status to set
  * @command: command to be freed
  * Return: nothing
