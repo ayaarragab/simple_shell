@@ -1,5 +1,16 @@
 #include "main.h"
 /**
+ * exit_command-2 - exit shell with a specific status
+ * @status: The exit status to set
+ * @command: command to be freed
+ * Return: nothing
+ */
+void exit_command_2(int status, char *command)
+{
+	free(command);
+	exit(status);
+}
+/**
  * check_if_all_spaces - checks if the line contain only spaces
  * @command: command str
  * Return: 0 if all spaces 1 if not all
@@ -64,7 +75,7 @@ char **make_array_of_strings(char *command)
 */
 int main(int argc, char **argv, char **env)
 {
-	char *command_buffer, *trimmed, **environ = env, **array_tokens;
+	char *command_buffer, *trimmed, **array_tokens;
 	size_t size = BUFF_SIZE, i;
 	(void)argc;
 	(void)argv;
@@ -86,19 +97,11 @@ int main(int argc, char **argv, char **env)
 			}
 			if (strcmp(trimmed, "env") == 0)
 			{
-				while (*environ != NULL)
-				{
-					printf("%s\n", *environ);
-					environ++;
-				}
-				free(command_buffer);
+				envv(env, command_buffer);
 				continue;
 			}
 			else if (strcmp(trimmed, "exit") == 0)
-			{
-				free(command_buffer);
-				exit_command(0);
-			}
+				exit_command_2(0, command_buffer);
 			array_tokens = make_array_of_strings(trimmed);
 			if (array_tokens != NULL)
 			{
