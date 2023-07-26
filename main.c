@@ -31,7 +31,7 @@ int check_if_all_spaces(char *command)
 */
 char **make_array_of_strings(char *command)
 {
-	char *token = malloc(BUFF_SIZE);
+	char *token;
 	char **tokens = malloc(BUFF_SIZE * sizeof(char *));
 	int num_tokns = 0, i;
 
@@ -41,7 +41,7 @@ char **make_array_of_strings(char *command)
 		return (NULL);
 	while (token != NULL)
 	{
-		tokens[num_tokns] = malloc(strlen(token) + 1);
+		tokens[num_tokns] = strdup(token);
 		if (tokens[num_tokns] == NULL)
 		{
 			for (i = 0; i < num_tokns; i++)
@@ -49,7 +49,6 @@ char **make_array_of_strings(char *command)
 			free(tokens);
 			return (NULL);
 		}
-		strcpy(tokens[num_tokns], token);
 		num_tokns++;
 		token = _strtok(NULL, " ");
 	}
@@ -65,16 +64,13 @@ char **make_array_of_strings(char *command)
 */
 int main(int argc, char **argv, char **env)
 {
-	char *command_buffer, *trimmed;
-	char **environ;
+	char *command_buffer, *trimmed, **environ = env, **array_tokens;
 	size_t size = BUFF_SIZE, i;
-	char **array_tokens;
 	(void)argc;
 	(void)argv;
 	command_buffer = malloc(BUFSIZ * sizeof(char));
 	while (1)
 	{
-		printf("$ ");
 		fflush(stdout);
 		if (_getline(&command_buffer, &size, stdin) == -1)
 			break;
@@ -85,18 +81,16 @@ int main(int argc, char **argv, char **env)
 			trimmed = trim(command_buffer);
 			if (trimmed == NULL)
 				continue;
-			if (strcmp(trimmed, "env\n") == 0)
+			if (strcmp(trimmed, "env") == 0)
 			{
-				environ = env;
 				while (*environ != NULL)
 				{
 					printf("%s\n", *environ);
 					environ++;
 				}
-				continue;
 			}
-			else if (strcmp(trimmed, "exit\n") == 0)
-				exit_command();
+			else if (strcmp(trimmed, "exit") == 0)
+				exit_command(0);
 			array_tokens = make_array_of_strings(trimmed);
 			for (i = 0; array_tokens[i] != NULL; i++)
 				continue;

@@ -27,8 +27,9 @@ typedef struct tokens_list
 } token_node;
 void execute_function(char **array_tokens, int number_of_tokens, char **env);
 int _setenv(const char *name, const char *value, int overwrite);
-void exit_command(void);
+void exit_command(int status);
 char **make_paths_seperately(char *paths);
 char *trim(char *str);
+void free_2d(char **arr_2D);
 #define BUFF_SIZE 1024
 #endif

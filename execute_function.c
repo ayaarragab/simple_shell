@@ -1,12 +1,19 @@
 #include "main.h"
 /**
  * error_behave - to minimize lines of execute function
+ * @argv: command line arguments
  * Return: nothing
 */
-void error_behave(void)
+void error_behave(char **argv)
 {
-	fprintf(stderr, "./hsh: No such file or directory\n");
-	exit(EXIT_FAILURE);
+	int i = 0;
+
+	while (argv[i])
+	{
+	fprintf(stderr, "./shell: 1: %s: not found\n", argv[i]);
+	i++;
+	}
+	exit_command(127);
 }
 /**
  * check_for_correct_path - checks for correct path
@@ -51,6 +58,19 @@ char *PATH_directories(char **env)
 	return (NULL);
 }
 /**
+ * is_command - checks if entered text is a command
+ * @argv: atgv
+ * @array_of_paths: array of paths
+ * Return: 1 or -1 or 0
+*/
+int is_command(char **argv, char **array_of_paths)
+{
+	if (access(argv[0], F_OK) ||
+	access(check_for_correct_path(argv, array_of_paths), F_OK))
+		return (1);
+	return (0);
+}
+/**
  * execute_function - excute based on a command
  * @array_tokens: array of tokens
  * @number_of_tokens: number of tokens
@@ -60,43 +80,41 @@ char *PATH_directories(char **env)
 void execute_function(char **array_tokens, int number_of_tokens, char **env)
 {
 	pid_t pid = 1;
-	char *PATH;
-	char **array_of_paths;
+	char *PATH, **array_of_paths;
 
 	PATH = PATH_directories(env);
 	array_of_paths = make_paths_seperately(PATH);
 	array_tokens[number_of_tokens] = NULL;
-	if (array_tokens[0] != NULL && (array_tokens[0][0] == '/' ||
-	(array_tokens[0][0] == '.' && array_tokens[0][1] == '/')))
+	if (is_command(array_tokens, array_of_paths))
 	{
 		pid = fork();
-		if (pid  < 0)
-			error_behave();
-		else if (pid == 0)
+		if (pid == 0)
+		{
+		if (array_tokens[0][0] == '/' || array_tokens[0][0] == '.')
 		{
 			if (execve(array_tokens[0], array_tokens, env) == -1)
-				error_behave();
-			else
-				error_behave();
+				error_behave(array_tokens);
 		}
 		else
-			wait(NULL);
-	}
-	else if (array_tokens[0] != NULL && array_tokens[0][0] != '/')
-	{
-		if (check_for_correct_path(array_tokens, array_of_paths) != NULL)
 		{
-			pid = fork();
-			if (pid < 0)
-				error_behave();
-			else if (pid == 0)
-			{
-				if (execve(check_for_correct_path(array_tokens, array_of_paths),
-				array_tokens, env) == -1)
-					error_behave();
-			}
-			else
-				wait(NULL);
+			if (execve(check_for_correct_path(array_tokens, array_of_paths),
+			array_tokens, env) == -1)
+				error_behave(array_tokens);
+		}
+		}
+		else if (pid < 0)
+			error_behave(array_tokens);
+		else
+		{
+			int status, es;
+
+			if (waitpid(pid, &status, 0) == -1)
+				exit_command(EXIT_FAILURE);
+			es = WEXITSTATUS(status);
+			if (es == 2)
+				exit_command(2);
 		}
 	}
+	free_2d(array_tokens);
+	free_2d(array_of_paths);
 }

@@ -1,10 +1,10 @@
 #include "main.h"
 /**
- * exit_command - exit shell
+ * exit_command - exit shell with a specific status
+ * @status: The exit status to set
  * Return: nothing
-*/
-void exit_command(void)
+ */
+void exit_command(int status)
 {
-	printf("exit\n");
-	exit(0);
+	exit(status);
 }
