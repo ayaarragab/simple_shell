@@ -83,7 +83,7 @@ int main(int argc, char **argv, char **env)
 	{
 		fflush(stdout);
 		if (_getline(&command_buffer, &size, stdin) == -1)
-			break;
+			exit_command(0);
 		if (check_if_all_spaces(command_buffer) == 0)
 			continue;
 		trimmed = trim(command_buffer);
