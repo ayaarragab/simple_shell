@@ -32,7 +32,9 @@ void cd(char **command)
 			}
 		}
 		else
+		{
 			printf("Directory does not exist.\n");
+			free_2d(command);
+		}
 	}
 }
-

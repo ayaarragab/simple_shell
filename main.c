@@ -75,11 +75,10 @@ char **make_array_of_strings(char *command)
 */
 int main(int argc, char **argv, char **env)
 {
-	char *command_buffer, *trimmed, **array_tokens;
+	char *command_buffer = malloc(BUFSIZ * sizeof(char)), *trimmed, **array_tokens;
 	size_t size = BUFF_SIZE, i;
 	(void)argc;
 	(void)argv;
-	command_buffer = malloc(BUFSIZ * sizeof(char));
 	while (1)
 	{
 		fflush(stdout);
@@ -87,34 +86,31 @@ int main(int argc, char **argv, char **env)
 			break;
 		if (check_if_all_spaces(command_buffer) == 0)
 			continue;
-		else
+		trimmed = trim(command_buffer);
+		if (trimmed == NULL)
 		{
-			trimmed = trim(command_buffer);
-			if (trimmed == NULL)
-			{
-				free(command_buffer);
-				continue;
-			}
-			if (strcmp(trimmed, "env") == 0)
-			{
-				envv(env, command_buffer);
-				continue;
-			}
-			else if (strcmp(trimmed, "exit") == 0)
-				exit_command_2(0, command_buffer);
-			array_tokens = make_array_of_strings(trimmed);
-			if (array_tokens != NULL)
-			{
-			for (i = 0; array_tokens[i] != NULL; i++)
-				continue;
-			if (strcmp(array_tokens[0], "cd") == 0)
-			{
-				cd(array_tokens);
-				continue;
-			}
-			execute_function(array_tokens, i, env);
-			free_2d(array_tokens);
-			}
+			free(command_buffer);
+			continue;
+		}
+		if (strcmp(trimmed, "env") == 0)
+		{
+			envv(env, command_buffer);
+			continue;
+		}
+		else if (strcmp(trimmed, "exit") == 0)
+			exit_command_2(0, command_buffer);
+		array_tokens = make_array_of_strings(trimmed);
+		if (array_tokens != NULL)
+		{
+		for (i = 0; array_tokens[i] != NULL; i++)
+			continue;
+		if (strcmp(array_tokens[0], "cd") == 0)
+		{
+			cd(array_tokens);
+			continue;
+		}
+		execute_function(array_tokens, i, env);
+		free_2d(array_tokens);
 		}
 	}
 	free(command_buffer);
