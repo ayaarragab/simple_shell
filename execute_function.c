@@ -69,8 +69,13 @@ int is_command(char **argv, char **array_of_paths)
 
 	if (argv[0] == NULL)
 		return (0);
-	if (access(argv[0], F_OK) == 0 || con_path != NULL)
+	if (access(argv[0], F_OK) == 0)
 		return (1);
+	else if (con_path)
+	{
+		free(con_path);
+		return (1);
+	}
 	return (0);
 }
 /**
@@ -103,7 +108,6 @@ void execute_function(char **array_tokens, int number_of_tokens, char **env)
 			con_path = check_for_correct_path(array_tokens, array_of_paths);
 			if (execve(con_path, array_tokens, env) == -1)
 				error_behave(array_tokens);
-			free(con_path);
 		}
 		}
 		else if (pid < 0)
