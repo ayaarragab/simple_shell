@@ -80,7 +80,10 @@ int main(int argc, char **argv, char **env)
 		{
 			trimmed = trim(command_buffer);
 			if (trimmed == NULL)
+			{
+				free(command_buffer);
 				continue;
+			}
 			if (strcmp(trimmed, "env") == 0)
 			{
 				while (*environ != NULL)
@@ -88,13 +91,22 @@ int main(int argc, char **argv, char **env)
 					printf("%s\n", *environ);
 					environ++;
 				}
+				free(command_buffer);
+				continue;
 			}
 			else if (strcmp(trimmed, "exit") == 0)
+			{
+				free(command_buffer);
 				exit_command(0);
+			}
 			array_tokens = make_array_of_strings(trimmed);
+			if (array_tokens != NULL)
+			{
 			for (i = 0; array_tokens[i] != NULL; i++)
 				continue;
 			execute_function(array_tokens, i, env);
+			free_2d(array_tokens);
+			}
 		}
 	}
 	free(command_buffer);

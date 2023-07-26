@@ -65,8 +65,11 @@ char *PATH_directories(char **env)
 */
 int is_command(char **argv, char **array_of_paths)
 {
-	if (access(argv[0], F_OK) ||
-	access(check_for_correct_path(argv, array_of_paths), F_OK))
+	char *con_path = check_for_correct_path(argv, array_of_paths);
+
+	if (argv[0] == NULL)
+		return (0);
+	if (access(argv[0], F_OK) == 0 || con_path != NULL)
 		return (1);
 	return (0);
 }
@@ -80,7 +83,7 @@ int is_command(char **argv, char **array_of_paths)
 void execute_function(char **array_tokens, int number_of_tokens, char **env)
 {
 	pid_t pid = 1;
-	char *PATH, **array_of_paths;
+	char *PATH, **array_of_paths, *con_path;
 
 	PATH = PATH_directories(env);
 	array_of_paths = make_paths_seperately(PATH);
@@ -97,9 +100,10 @@ void execute_function(char **array_tokens, int number_of_tokens, char **env)
 		}
 		else
 		{
-			if (execve(check_for_correct_path(array_tokens, array_of_paths),
-			array_tokens, env) == -1)
+			con_path = check_for_correct_path(array_tokens, array_of_paths);
+			if (execve(con_path, array_tokens, env) == -1)
 				error_behave(array_tokens);
+			free(con_path);
 		}
 		}
 		else if (pid < 0)
@@ -115,6 +119,5 @@ void execute_function(char **array_tokens, int number_of_tokens, char **env)
 				exit_command(2);
 		}
 	}
-	free_2d(array_tokens);
 	free_2d(array_of_paths);
 }
