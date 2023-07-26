@@ -107,6 +107,11 @@ int main(int argc, char **argv, char **env)
 			{
 			for (i = 0; array_tokens[i] != NULL; i++)
 				continue;
+			if (strcmp(array_tokens[0], "cd") == 0)
+			{
+				cd(array_tokens);
+				continue;
+			}
 			execute_function(array_tokens, i, env);
 			free_2d(array_tokens);
 			}

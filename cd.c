@@ -26,6 +26,7 @@ void cd(char **command)
 			{
 				if (setenv("PWD", new_pwd, 1) != 0)
 				{
+					free_2d(command);
 					return;
 				}
 			}
