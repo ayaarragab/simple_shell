@@ -75,7 +75,7 @@ char **make_array_of_strings(char *command)
 */
 int main(int argc, char **argv, char **env)
 {
-	char *command_buffer = malloc(BUFSIZ * sizeof(char)), *trimmed, **array_tokens;
+	char *command_buffer = malloc(BUFSIZ * sizeof(char)), *trimmed, **array_token;
 	size_t size = BUFF_SIZE, i;
 	(void)argc;
 	(void)argv;
@@ -99,18 +99,18 @@ int main(int argc, char **argv, char **env)
 		}
 		else if (strcmp(trimmed, "exit") == 0)
 			exit_command_2(0, command_buffer);
-		array_tokens = make_array_of_strings(trimmed);
-		if (array_tokens != NULL)
+		array_token = make_array_of_strings(trimmed);
+		if (array_token != NULL)
 		{
-		for (i = 0; array_tokens[i] != NULL; i++)
+		for (i = 0; array_token[i] != NULL; i++)
 			continue;
-		if (strcmp(array_tokens[0], "cd") == 0)
+		if (strcmp(array_token[0], "cd") == 0)
 		{
-			cd(array_tokens);
+			cd(array_token);
 			continue;
 		}
-		execute_function(array_tokens, i, env);
-		free_2d(array_tokens);
+		execute_function(array_token, i, env);
+		free_2d(array_token);
 		}
 	}
 	free(command_buffer);
