@@ -109,7 +109,7 @@ int main(int argc, char **argv, char **env)
 			cd(array_token);
 			continue;
 		}
-		execute_function(array_token, i, env);
+		execute_function(array_token, i, env, command_buffer);
 		free_2d(array_token);
 		}
 	}

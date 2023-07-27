@@ -10,9 +10,10 @@ void error_behave(char **argv)
 
 	while (argv[i])
 	{
-	fprintf(stderr, "./shell: 1: %s: not found\n", argv[i]);
+	fprintf(stderr, "./hsh: 1: %s: not found\n", argv[i]);
 	i++;
 	}
+	free_2d(argv);
 	exit_command(127);
 }
 /**
@@ -85,12 +86,13 @@ int is_command(char **argv, char **array_of_paths)
  * @env: environment variables
  * Return: nothing
 */
-void execute_function(char **array_tokens, int number_of_tokens, char **env)
+void execute_function(char **array_tokens, int number_of_tokens, char **env, char *command)
 {
 	pid_t pid = 1;
 	char *PATH, **array_of_paths, *con_path;
 
 	PATH = PATH_directories(env);
+	(void)command;
 	array_of_paths = make_paths_seperately(PATH);
 	array_tokens[number_of_tokens] = NULL;
 	if (is_command(array_tokens, array_of_paths))
@@ -120,7 +122,7 @@ void execute_function(char **array_tokens, int number_of_tokens, char **env)
 				exit_command(EXIT_FAILURE);
 			es = WEXITSTATUS(status);
 			if (es == 2)
-				exit_command(2);
+				free_all_then_exit(array_tokens, array_of_paths, command);
 		}
 	}
 	free_2d(array_of_paths);
