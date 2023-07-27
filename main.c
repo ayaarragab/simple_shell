@@ -97,8 +97,8 @@ int main(int argc, char **argv, char **env)
 			envv(env, command_buffer);
 			continue;
 		}
-		else if (strcmp(trimmed, "exit") == 0)
-			exit_command_2(0, command_buffer);
+		else if (strncmp(trimmed, "exit", 4) == 0)
+			exit_command(command_buffer);
 		array_token = make_array_of_strings(trimmed);
 		if (array_token != NULL)
 		{

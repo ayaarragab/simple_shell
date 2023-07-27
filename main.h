@@ -13,6 +13,7 @@
 #include <dirent.h>
 #include <limits.h>
 #include <ctype.h>
+#include <stdbool.h>
 ssize_t _getline(char **command_buff, size_t *n, FILE *_stdin);
 char *_strtok(char *string, const char *delim);
 /**
@@ -34,6 +35,7 @@ char *trim(char *str);
 void free_2d(char **arr_2D);
 void envv(char **envi, char *command);
 void cd(char **command);
+int exit_command(char *command);
 #define BUFF_SIZE 1024
 #include "main.h"
 #endif
