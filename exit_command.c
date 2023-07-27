@@ -4,18 +4,18 @@
  * @str: str after exit
  * Return: false or true
 */
-bool handle_validated(char *str)
+int handle_validated(char *str)
 {
 	int i = 0;
 
 	if (str[0] == '-')
-		return (false);
+		return (0);
 	for (; str[i] != '\0'; i++)
 	{
 		if (str[i] < '0' || str[i] > '9')
-			return (false);
+			return (0);
 	}
-		return (true);
+		return (1);
 }
 /**
  * exit_command - exit shell with a specific status
@@ -47,4 +47,3 @@ int exit_command(char *command)
 	free(command);
 	return (0);
 }
-
