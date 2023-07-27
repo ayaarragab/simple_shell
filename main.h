@@ -33,7 +33,7 @@ char *trim(char *str);
 void free_2d(char **arr_2D);
 void envv(char **envi, char *command);
 void cd(char **command);
-int exit_command(char *command);
+void exit_command(char *command);
 #define BUFF_SIZE 1024
 #include "main.h"
 #endif

@@ -22,7 +22,7 @@ int handle_validated(char *str)
  * @command: The exit status to set
  * Return: exit value
  */
-int exit_command(char *command)
+void exit_command(char *command)
 {
 	char *status_str = strchr(command, ' ');
 	int status_number;
@@ -39,13 +39,12 @@ int exit_command(char *command)
 			status_number = atoi(status_str);
 		else
 		{
-			free(command);
 			fprintf(stderr, "./hsh: 1: exit: Illegal number: %s\n", status_str);
+			free(command);
 			exit(2);
 		}
 		free(command);
 		exit(status_number);
-	}
+	} 
 	free(command);
-	return (0);
 }
