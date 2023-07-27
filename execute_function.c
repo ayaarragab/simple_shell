@@ -81,12 +81,13 @@ int is_command(char **argv, char **array_of_paths)
 }
 /**
  * execute_function - excute based on a command
- * @array_tokens: array of tokens
- * @number_of_tokens: number of tokens
+ * @arry_tkn: array of tokens
+ * @n: number of tokens
  * @env: environment variables
+ * @command: command
  * Return: nothing
 */
-void execute_function(char **array_tokens, int number_of_tokens, char **env, char *command)
+void execute_function(char **arry_tkn, int n, char **env, char *command)
 {
 	pid_t pid = 1;
 	char *PATH, **array_of_paths, *con_path;
@@ -94,26 +95,26 @@ void execute_function(char **array_tokens, int number_of_tokens, char **env, cha
 	PATH = PATH_directories(env);
 	(void)command;
 	array_of_paths = make_paths_seperately(PATH);
-	array_tokens[number_of_tokens] = NULL;
-	if (is_command(array_tokens, array_of_paths))
+	arry_tkn[n] = NULL;
+	if (is_command(arry_tkn, array_of_paths))
 	{
 		pid = fork();
 		if (pid == 0)
 		{
-		if (array_tokens[0][0] == '/' || array_tokens[0][0] == '.')
+		if (arry_tkn[0][0] == '/' || arry_tkn[0][0] == '.')
 		{
-			if (execve(array_tokens[0], array_tokens, env) == -1)
-				error_behave(array_tokens);
+			if (execve(arry_tkn[0], arry_tkn, env) == -1)
+				error_behave(arry_tkn);
 		}
 		else
 		{
-			con_path = check_for_correct_path(array_tokens, array_of_paths);
-			if (execve(con_path, array_tokens, env) == -1)
-				error_behave(array_tokens);
+			con_path = check_for_correct_path(arry_tkn, array_of_paths);
+			if (execve(con_path, arry_tkn, env) == -1)
+				error_behave(arry_tkn);
 		}
 		}
 		else if (pid < 0)
-			error_behave(array_tokens);
+			error_behave(arry_tkn);
 		else
 		{
 			int status, es;
@@ -122,8 +123,9 @@ void execute_function(char **array_tokens, int number_of_tokens, char **env, cha
 				exit_command(EXIT_FAILURE);
 			es = WEXITSTATUS(status);
 			if (es == 2)
-				free_all_then_exit(array_tokens, array_of_paths, command);
+				free_all_then_exit(arry_tkn, array_of_paths, command);
 		}
 	}
 	free_2d(array_of_paths);
 }
+

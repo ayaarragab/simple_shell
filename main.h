@@ -25,7 +25,7 @@ typedef struct tokens_list
 	char *token;
 	struct tokens_list *next;
 } token_node;
-void execute_function(char **array_tokens, int number_of_tokens, char **env, char *command);
+void execute_function(char **arry_tkn, int n, char **env, char *command);
 void free_all_then_exit(char **array_token, char **array_paths, char *command);
 int _setenv(const char *name, const char *value, int overwrite);
 void exit_command(int status);
