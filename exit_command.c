@@ -45,6 +45,7 @@ void exit_command(char *command)
 		}
 		free(command);
 		exit(status_number);
-	} 
+	}
 	free(command);
 }
+
