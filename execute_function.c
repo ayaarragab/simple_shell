@@ -130,5 +130,8 @@ void execute_function(char **arry_tkn, int n, char **env, char *command)
 				free_all_then_exit(arry_tkn, array_of_paths, command);
 		}
 	}
+	else
+			error_behave(arry_tkn, array_of_paths, command);
 	free_2d(array_of_paths);
 }
+
