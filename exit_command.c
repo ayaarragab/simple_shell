@@ -39,9 +39,11 @@ int exit_command(char *command)
 			status_number = atoi(status_str);
 		else
 		{
+			free(command);
 			fprintf(stderr, "./hsh: 1: exit: Illegal number: %s\n", status_str);
 			exit(2);
 		}
+		free(command);
 		exit(status_number);
 	}
 	free(command);
