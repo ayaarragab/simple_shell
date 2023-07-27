@@ -13,7 +13,6 @@
 #include <dirent.h>
 #include <limits.h>
 #include <ctype.h>
-#include <stdbool.h>
 ssize_t _getline(char **command_buff, size_t *n, FILE *_stdin);
 char *_strtok(char *string, const char *delim);
 /**
@@ -29,7 +28,6 @@ typedef struct tokens_list
 void execute_function(char **arry_tkn, int n, char **env, char *command);
 void free_all_then_exit(char **array_token, char **array_paths, char *command);
 int _setenv(const char *name, const char *value, int overwrite);
-void exit_command(int status);
 char **make_paths_seperately(char *paths);
 char *trim(char *str);
 void free_2d(char **arr_2D);

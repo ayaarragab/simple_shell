@@ -18,7 +18,7 @@ void error_behave(char **argv, char **paths, char *command)
 	free_2d(argv);
 	free_2d(paths);
 	free(command);
-	exit_command(127);
+	exit(127);
 }
 /**
  * check_for_correct_path - checks for correct path
@@ -124,7 +124,7 @@ void execute_function(char **arry_tkn, int n, char **env, char *command)
 			int status, es;
 
 			if (waitpid(pid, &status, 0) == -1)
-				exit_command(EXIT_FAILURE);
+				exit(EXIT_FAILURE);
 			es = WEXITSTATUS(status);
 			if (es == 2)
 				free_all_then_exit(arry_tkn, array_of_paths, command);
@@ -134,4 +134,3 @@ void execute_function(char **arry_tkn, int n, char **env, char *command)
 			error_behave(arry_tkn, array_of_paths, command);
 	free_2d(array_of_paths);
 }
-
