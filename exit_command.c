@@ -28,7 +28,10 @@ int exit_command(char *command)
 	int status_number;
 
 	if (strcmp(command, "exit") == 0)
+	{
+		free(command);
 		exit(0);
+	}
 	if (status_str != NULL)
 	{
 		status_str++;
