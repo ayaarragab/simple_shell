@@ -2,9 +2,11 @@
 /**
  * error_behave - to minimize lines of execute function
  * @argv: command line arguments
+ * @paths: paths
+ * @command: command
  * Return: nothing
 */
-void error_behave(char **argv)
+void error_behave(char **argv, char **paths, char *command)
 {
 	int i = 0;
 
@@ -14,6 +16,8 @@ void error_behave(char **argv)
 	i++;
 	}
 	free_2d(argv);
+	free_2d(paths);
+	free(command);
 	exit_command(127);
 }
 /**
@@ -104,17 +108,17 @@ void execute_function(char **arry_tkn, int n, char **env, char *command)
 		if (arry_tkn[0][0] == '/' || arry_tkn[0][0] == '.')
 		{
 			if (execve(arry_tkn[0], arry_tkn, env) == -1)
-				error_behave(arry_tkn);
+				error_behave(arry_tkn, array_of_paths, command);
 		}
 		else
 		{
 			con_path = check_for_correct_path(arry_tkn, array_of_paths);
 			if (execve(con_path, arry_tkn, env) == -1)
-				error_behave(arry_tkn);
+				error_behave(arry_tkn, array_of_paths, command);
 		}
 		}
 		else if (pid < 0)
-			error_behave(arry_tkn);
+			error_behave(arry_tkn, array_of_paths, command);
 		else
 		{
 			int status, es;
@@ -128,4 +132,3 @@ void execute_function(char **arry_tkn, int n, char **env, char *command)
 	}
 	free_2d(array_of_paths);
 }
-
