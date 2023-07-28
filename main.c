@@ -1,7 +1,13 @@
 #include "main.h"
+/**
+ * handle_variables - handle_variables
+ * @command: command
+ * Return: nothing
+*/
 void handle_variables(char *command)
 {
 	char *var_name = strchr(command, '$') + 1;
+
 	if (strcmp(var_name, "$") == 0)
 	{
 		free(command);
