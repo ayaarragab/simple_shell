@@ -1,4 +1,5 @@
 #include "main.h"
+
 /**
  * exit_command_2 - exit shell with a specific status
  * @status: The exit status to set
@@ -10,11 +11,12 @@ void exit_command_2(int status, char *command)
 	free(command);
 	exit(status);
 }
+
 /**
- * check_if_all_spaces - checks if the line contain only spaces
+ * check_if_all_spaces - checks if the line contains only spaces
  * @command: command str
- * Return: 0 if all spaces 1 if not all
-*/
+ * Return: 0 if all spaces, 1 if not all
+ */
 int check_if_all_spaces(char *command)
 {
 	int cntr;
@@ -35,11 +37,12 @@ int check_if_all_spaces(char *command)
 		return (0);
 	return (1);
 }
+
 /**
  * make_array_of_strings - func
  * @command: command entered
  * Return: array of strings
-*/
+ */
 char **make_array_of_strings(char *command)
 {
 	char *token;
@@ -50,6 +53,7 @@ char **make_array_of_strings(char *command)
 
 	if (tokens == NULL || token == NULL)
 		return (NULL);
+
 	while (token != NULL)
 	{
 		tokens[num_tokns] = strdup(token);
@@ -63,29 +67,33 @@ char **make_array_of_strings(char *command)
 		num_tokns++;
 		token = _strtok(NULL, " ");
 	}
+
 	tokens[num_tokns] = NULL;
 	return (tokens);
 }
+
 /**
  * main - main function
  * @argc: length of vector array
  * @argv: vector array
  * @env: environment variables
- * Return: 0 in success, -1 in error
-*/
+ * Return: 0 on success, -1 on error
+ */
 int main(int argc, char **argv, char **env)
 {
 	char *commandbuf = malloc(BUFSIZ * sizeof(char)), *trimmed, **array_token;
 	size_t size = BUFF_SIZE, i;
 	(void)argc;
 	(void)argv;
+
 	while (1)
 	{
 		fflush(stdout);
 		if (_getline(&commandbuf, &size, stdin) == -1)
 			exit_command_2(0, commandbuf);
-		if (check_if_all_spaces(commandbuf) == 0)
+		if (check_if_all_spaces(commandbuf) == 0 || commandbuf[0] == '#')
 			continue;
+		comment_handle(commandbuf);
 		trimmed = trim(commandbuf);
 		if (trimmed == NULL)
 		{
@@ -99,15 +107,19 @@ int main(int argc, char **argv, char **env)
 		}
 		else if (strncmp(trimmed, "exit", 4) == 0)
 			exit_command(commandbuf);
+
 		array_token = make_array_of_strings(trimmed);
+
 		if (array_token != NULL)
 		{
-		for (i = 0; array_token[i] != NULL; i++)
-			continue;
-		execute_function(array_token, i, env, commandbuf);
-		free_2d(array_token);
+			for (i = 0; array_token[i] != NULL; i++)
+				continue;
+			execute_function(array_token, i, env, commandbuf);
+			free_2d(array_token);
 		}
 	}
+
 	free(commandbuf);
 	return (0);
 }
+
