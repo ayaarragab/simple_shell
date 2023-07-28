@@ -1,22 +1,5 @@
 #include "main.h"
 /**
- * handle_variables - handle_variables
- * @command: command
- * Return: nothing
-*/
-void handle_variables(char *command)
-{
-	char *var_name = strchr(command, '$') + 1;
-
-	if (strcmp(var_name, "$") == 0)
-	{
-		free(command);
-		printf("%d\n", getpid());
-		return;
-	}
-	printf("%s\n", getenv(var_name));
-}
-/**
  * exit_command_2 - exit shell with a specific status
  * @status: The exit status to set
  * @command: command to be freed
@@ -116,11 +99,6 @@ int main(int argc, char **argv, char **env)
 		}
 		else if (strncmp(trimmed, "exit", 4) == 0)
 			exit_command(commandbuf);
-		if (strncmp(trimmed, "echo $", 6) == 0)
-		{
-			handle_variables(commandbuf);
-			continue;
-		}
 		array_token = make_array_of_strings(trimmed);
 		if (array_token != NULL)
 		{
