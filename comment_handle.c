@@ -6,14 +6,15 @@
  */
 void comment_handle(char *command)
 {
-	int i = 0;
+	int i;
 
-	for(i = 0; command[i] != '\0'; i++)
+	for (i = 1; command[i] != '\0'; i++)
 	{
-		if (command[i - 1] == ' ' && command[i] == '#')
+		if (isspace(command[i - 1]) && command[i] == '#')
 		{
 			command[i] = '\0';
 			break;
 		}
 	}
 }
+

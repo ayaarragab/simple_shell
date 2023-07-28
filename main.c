@@ -1,5 +1,21 @@
 #include "main.h"
+/**
+ * if_hash - if hash
+ * @command: command
+ * Return: 0 if has no hash or 1 or 2
+*/
+int if_hash(char *command)
+{
+	int i = 1;
 
+	while (command[i])
+	{
+		if (command[i - 1] == ' ' && command[i] == '#')
+			return (2);
+		i++;
+	}
+	return (0);
+}
 /**
  * exit_command_2 - exit shell with a specific status
  * @status: The exit status to set
@@ -93,7 +109,8 @@ int main(int argc, char **argv, char **env)
 			exit_command_2(0, commandbuf);
 		if (check_if_all_spaces(commandbuf) == 0 || commandbuf[0] == '#')
 			continue;
-		comment_handle(commandbuf);
+		else if (if_hash(commandbuf) == 2)
+			comment_handle(commandbuf);
 		trimmed = trim(commandbuf);
 		if (trimmed == NULL)
 		{
@@ -107,9 +124,7 @@ int main(int argc, char **argv, char **env)
 		}
 		else if (strncmp(trimmed, "exit", 4) == 0)
 			exit_command(commandbuf);
-
 		array_token = make_array_of_strings(trimmed);
-
 		if (array_token != NULL)
 		{
 			for (i = 0; array_token[i] != NULL; i++)
@@ -118,7 +133,6 @@ int main(int argc, char **argv, char **env)
 			free_2d(array_token);
 		}
 	}
-
 	free(commandbuf);
 	return (0);
 }
