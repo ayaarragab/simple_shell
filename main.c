@@ -82,7 +82,7 @@ int main(int argc, char **argv, char **env)
 	while (1)
 	{
 		fflush(stdout);
-		if (isatty(STDIN_FILENO) != 0 && _getline(&commandbuf, &size, stdin) == -1)
+		if (_getline(&commandbuf, &size, stdin) == -1)
 			exit_command_2(0, commandbuf);
 		if (check_if_all_spaces(commandbuf) == 0)
 			continue;
