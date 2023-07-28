@@ -75,30 +75,30 @@ char **make_array_of_strings(char *command)
 */
 int main(int argc, char **argv, char **env)
 {
-	char *command_buffer = malloc(BUFSIZ * sizeof(char)), *trimmed, **array_token;
+	char *commandbuf = malloc(BUFSIZ * sizeof(char)), *trimmed, **array_token;
 	size_t size = BUFF_SIZE, i;
 	(void)argc;
 	(void)argv;
 	while (1)
 	{
 		fflush(stdout);
-		if (_getline(&command_buffer, &size, stdin) == -1)
-			exit_command_2(0, command_buffer);
-		if (check_if_all_spaces(command_buffer) == 0)
+		if (isatty(STDIN_FILENO) != 0 && _getline(&commandbuf, &size, stdin) == -1)
+			exit_command_2(0, commandbuf);
+		if (check_if_all_spaces(commandbuf) == 0)
 			continue;
-		trimmed = trim(command_buffer);
+		trimmed = trim(commandbuf);
 		if (trimmed == NULL)
 		{
-			free(command_buffer);
+			free(commandbuf);
 			continue;
 		}
 		if (strcmp(trimmed, "env") == 0)
 		{
-			envv(env, command_buffer);
+			envv(env, commandbuf);
 			continue;
 		}
 		else if (strncmp(trimmed, "exit", 4) == 0)
-			exit_command(command_buffer);
+			exit_command(commandbuf);
 		array_token = make_array_of_strings(trimmed);
 		if (array_token != NULL)
 		{
@@ -109,10 +109,11 @@ int main(int argc, char **argv, char **env)
 			cd(array_token);
 			continue;
 		}
-		execute_function(array_token, i, env, command_buffer);
+		execute_function(array_token, i, env, commandbuf);
 		free_2d(array_token);
 		}
 	}
-	free(command_buffer);
+	free(commandbuf);
 	return (0);
 }
+
