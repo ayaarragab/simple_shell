@@ -1,4 +1,15 @@
 #include "main.h"
+void handle_variables(char *command)
+{
+	char *var_name = strchr(command, '$') + 1;
+	if (strcmp(var_name, "$") == 0)
+	{
+		free(command);
+		printf("%d\n", getpid());
+		return;
+	}
+	printf("%s\n", getenv(var_name));
+}
 /**
  * exit_command_2 - exit shell with a specific status
  * @status: The exit status to set
@@ -99,16 +110,16 @@ int main(int argc, char **argv, char **env)
 		}
 		else if (strncmp(trimmed, "exit", 4) == 0)
 			exit_command(commandbuf);
+		if (strncmp(trimmed, "echo $", 6) == 0)
+		{
+			handle_variables(commandbuf);
+			continue;
+		}
 		array_token = make_array_of_strings(trimmed);
 		if (array_token != NULL)
 		{
 		for (i = 0; array_token[i] != NULL; i++)
 			continue;
-		if (strcmp(array_token[0], "cd") == 0)
-		{
-			cd(array_token);
-			continue;
-		}
 		execute_function(array_token, i, env, commandbuf);
 		free_2d(array_token);
 		}
@@ -116,4 +127,3 @@ int main(int argc, char **argv, char **env)
 	free(commandbuf);
 	return (0);
 }
-
