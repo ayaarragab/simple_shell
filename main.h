@@ -35,6 +35,8 @@ void envv(char **envi, char *command);
 void cd(char **command);
 void exit_command(char *command);
 void comment_handle(char *command);
+void cd_command(char **directory);
 #define BUFF_SIZE 1024
+#define MAX_PATH_LENGTH 4096
 #include "main.h"
 #endif
