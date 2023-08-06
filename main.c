@@ -125,12 +125,7 @@ int main(int argc, char **argv, char **env)
 		else if (strncmp(trimmed, "exit", 4) == 0)
 			exit_command(commandbuf);
 		array_token = make_array_of_strings(trimmed);
-		if (strncmp(array_token[0], "cd", 2) == 0)
-		{
-			cd_command(array_token);
-			free_2d(array_token);
-		}
-		else if (array_token != NULL)
+		if (array_token != NULL)
 		{
 			for (i = 0; array_token[i] != NULL; i++)
 				continue;
